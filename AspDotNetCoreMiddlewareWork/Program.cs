@@ -21,20 +21,35 @@ app.Use(async (HttpContext context, RequestDelegate next) =>
 
 app.Use(async (HttpContext context,RequestDelegate next) =>
 {
-        await context.Response.WriteAsync("Second middleware is called");
+        await context.Response.WriteAsync("\n\nSecond middleware is called");
         await next(context);
 });
 
 // here i have called my custom middleware which injected in the program class using builder object
 // builder.Services.AddTransient<MyCustomeMiddleware>(); // this line registers MyCustomeMiddleware as service
 //app.UseMiddleware<MyCustomeMiddleware>();
-app.MyCustomeMiddleware();
+//app.MyCustomeMiddleware();
 
 //Another custom middleware called UseCustomConventionalMiddleware
-app.UseCustomConventionalMiddleware();
+//app.UseCustomConventionalMiddleware();
+
+app.UseWhen(context => context.Request.Query.ContainsKey("age"),
+
+    app => {
+        app.Use(async (context, next) =>
+        {
+            await context.Response.WriteAsync("\n\nUseWhen middleware is called on condition");
+            await next(context);
+        });
+    }
+
+  );
+
 app.Run(async (HttpContext context) =>
 {
-    await context.Response.WriteAsync("\nAnother Middleware called after custom middleware ");
+    
+    await context.Response.WriteAsync("\nAnother Middleware called after custom middleware "
+        + context.Request.Query.ContainsKey("age"));
 });
 
 app.Run();

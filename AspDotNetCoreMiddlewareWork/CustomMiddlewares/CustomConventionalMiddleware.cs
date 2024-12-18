@@ -16,9 +16,9 @@ namespace AspDotNetCoreMiddlewareWork.CustomMiddlewares
 
         public async Task Invoke(HttpContext httpContext)
         {
-            httpContext.Response.WriteAsync("Conventional Middleware is started");
+            await httpContext.Response.WriteAsync("\n\nConventional Middleware is started");
             await  _next(httpContext);
-            httpContext.Response.WriteAsync("Conventional Middleware is Finished");
+            await httpContext.Response.WriteAsync("\n\nConventional Middleware is Finished");
         }
     }
 
