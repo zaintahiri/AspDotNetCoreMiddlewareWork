@@ -30,6 +30,8 @@ app.Use(async (HttpContext context,RequestDelegate next) =>
 //app.UseMiddleware<MyCustomeMiddleware>();
 app.MyCustomeMiddleware();
 
+//Another custom middleware called UseCustomConventionalMiddleware
+app.UseCustomConventionalMiddleware();
 app.Run(async (HttpContext context) =>
 {
     await context.Response.WriteAsync("\nAnother Middleware called after custom middleware ");
